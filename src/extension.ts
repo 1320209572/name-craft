@@ -1,11 +1,9 @@
 import * as vscode from 'vscode';
-import { NameGenerator } from './nameGenerator';
 import { TranslationService } from './translationService';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('NameCraft 插件已激活');
 
-    const nameGenerator = new NameGenerator();
     const translationService = new TranslationService();
 
     // 快速命名命令
