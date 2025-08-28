@@ -36,6 +36,48 @@
         "title": "翻译选中文本",
         "category": "NameCraft",
         "icon": "$(globe)"
+      },
+      {
+        "command": "namecraft.quickCamelCase",
+        "title": "转换为小驼峰 (camelCase)",
+        "category": "NameCraft",
+        "icon": "$(symbol-variable)"
+      },
+      {
+        "command": "namecraft.quickPascalCase",
+        "title": "转换为大驼峰 (PascalCase)",
+        "category": "NameCraft",
+        "icon": "$(symbol-class)"
+      },
+      {
+        "command": "namecraft.quickSnakeCase",
+        "title": "转换为下划线 (snake_case)",
+        "category": "NameCraft",
+        "icon": "$(symbol-function)"
+      },
+      {
+        "command": "namecraft.quickUnderscoreCase",
+        "title": "转换为前下划线 (_snake_case)",
+        "category": "NameCraft",
+        "icon": "$(symbol-constant)"
+      },
+      {
+        "command": "namecraft.quickConstantCase",
+        "title": "转换为常量 (CONSTANT_CASE)",
+        "category": "NameCraft",
+        "icon": "$(symbol-enum)"
+      },
+      {
+        "command": "namecraft.quickReplace",
+        "title": "智能替换为驼峰命名 (F2)",
+        "category": "NameCraft",
+        "icon": "$(replace-all)"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "namecraft.quickTransform",
+        "label": "快速转换格式"
       }
     ],
     "menus": {
@@ -43,12 +85,39 @@
         {
           "command": "namecraft.translateSelection",
           "when": "editorHasSelection",
-          "group": "namecraft"
+          "group": "namecraft@1"
         },
         {
           "command": "namecraft.quickNaming", 
           "when": "editorTextFocus",
-          "group": "namecraft"
+          "group": "namecraft@2"
+        },
+        {
+          "submenu": "namecraft.quickTransform",
+          "when": "editorHasSelection",
+          "group": "namecraft@3"
+        }
+      ],
+      "namecraft.quickTransform": [
+        {
+          "command": "namecraft.quickCamelCase",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "namecraft.quickPascalCase",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "namecraft.quickSnakeCase",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "namecraft.quickUnderscoreCase",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "namecraft.quickConstantCase",
+          "when": "editorHasSelection"
         }
       ],
       "commandPalette": [
@@ -67,6 +136,36 @@
         "key": "ctrl+alt+n", 
         "mac": "cmd+alt+n",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "namecraft.quickCamelCase",
+        "key": "alt+1",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "namecraft.quickPascalCase", 
+        "key": "alt+2",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "namecraft.quickSnakeCase",
+        "key": "alt+3", 
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "namecraft.quickUnderscoreCase",
+        "key": "alt+4",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "namecraft.quickConstantCase",
+        "key": "alt+5",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "namecraft.quickReplace",
+        "key": "f2",
+        "when": "editorHasSelection"
       }
     ],
     "configuration": {
@@ -89,6 +188,33 @@
           "minimum": 1,
           "maximum": 10,
           "description": "最大建议数量"
+        },
+        "namecraft.customRules": {
+          "type": "object",
+          "default": {},
+          "description": "自定义快捷键规则",
+          "properties": {
+            "alt1": {
+              "type": "object",
+              "description": "Alt+1 快捷键规则"
+            },
+            "alt2": {
+              "type": "object", 
+              "description": "Alt+2 快捷键规则"
+            },
+            "alt3": {
+              "type": "object",
+              "description": "Alt+3 快捷键规则"
+            },
+            "alt4": {
+              "type": "object",
+              "description": "Alt+4 快捷键规则"
+            },
+            "alt5": {
+              "type": "object",
+              "description": "Alt+5 快捷键规则"
+            }
+          }
         }
       }
     }

@@ -21,6 +21,18 @@ export class TranslationService {
         return results;
     }
 
+    // F2专用：直接返回驼峰格式
+    async translateToCamelCase(chineseText: string): Promise<string> {
+        const cacheKey = `camelCase:${chineseText}`;
+        if (this.cache.has(cacheKey)) {
+            return this.cache.get(cacheKey)![0].text;
+        }
+
+        const result = await this.translateWithCamelCasePrompt(chineseText);
+        this.cache.set(cacheKey, [{text: result, confidence: 1, service: 'camelCase'}]);
+        return result;
+    }
+
     private async translateWithGoogle(text: string): Promise<TranslationResult[]> {
         try {
             const response = await axios.post('http://localhost:3000/api/process', {
@@ -81,6 +93,40 @@ export class TranslationService {
             } else {
                 throw new Error(`翻译服务调用失败: ${error.message}`);
             }
+        }
+    }
+
+    private async translateWithCamelCasePrompt(text: string): Promise<string> {
+        try {
+            const response = await axios.post('http://localhost:3000/api/process', {
+                text: `请将以下中文直接转换为一个合适的英文camelCase格式变量名：
+要求：
+1. 只返回一个最佳的camelCase格式变量名
+2. 语义准确，简洁明了
+3. 符合编程规范
+4. 直接返回变量名，不要任何解释或格式包装
+
+中文：${text}`
+            }, { timeout: 60000 });
+
+            if (!response.data.success) {
+                throw new Error(response.data.message || 'F2翻译API调用失败');
+            }
+
+            let result = response.data.data;
+            
+            // 清理返回结果，只保留变量名
+            if (typeof result === 'string') {
+                result = result.trim()
+                    .replace(/^```.*$/gm, '') // 去掉代码块标记
+                    .replace(/^\s*[\{\}\[\]"'`]/gm, '') // 去掉JSON符号
+                    .replace(/\s.*$/, '') // 只保留第一个单词/变量名
+                    .trim();
+            }
+
+            return result;
+        } catch (error: any) {
+            throw new Error(`F2翻译失败: ${error.message}`);
         }
     }
 }
