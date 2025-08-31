@@ -1,7 +1,7 @@
 {
   "name": "namecraft",
-  "displayName": "NameCraft - Ai变量命名",
-  "description": "AI驱动的中英文代码命名助手，让变量命名变得简单优雅",
+  "displayName": "NameAI 命名助手",
+  "description": "AI驱动的中英文代码命名助手，支持96种命名风格，让变量命名变得简单优雅",
   "version": "0.1.0",
   "publisher": "namecraft",
   "icon": "resources/icon.png",
@@ -68,10 +68,16 @@
         "icon": "$(symbol-enum)"
       },
       {
-        "command": "namecraft.quickReplace",
-        "title": "智能替换为驼峰命名 (F2)",
+        "command": "namecraft.configureApiKey",
+        "title": "配置 API Key",
         "category": "NameCraft",
-        "icon": "$(replace-all)"
+        "icon": "$(key)"
+      },
+      {
+        "command": "namecraft.smartNaming",
+        "title": "智能命名建议",
+        "category": "NameCraft",
+        "icon": "$(lightbulb)"
       }
     ],
     "submenus": [
@@ -96,6 +102,11 @@
           "submenu": "namecraft.quickTransform",
           "when": "editorHasSelection",
           "group": "namecraft@3"
+        },
+        {
+          "command": "namecraft.smartNaming",
+          "when": "editorHasSelection",
+          "group": "namecraft@4"
         }
       ],
       "namecraft.quickTransform": [
@@ -127,6 +138,9 @@
         {
           "command": "namecraft.translateSelection",
           "when": "editorHasSelection"
+        },
+        {
+          "command": "namecraft.configureApiKey"
         }
       ]
     },
@@ -161,11 +175,6 @@
         "command": "namecraft.quickConstantCase",
         "key": "alt+5",
         "when": "editorHasSelection"
-      },
-      {
-        "command": "namecraft.quickReplace",
-        "key": "f2",
-        "when": "editorHasSelection"
       }
     ],
     "configuration": {
@@ -189,32 +198,31 @@
           "maximum": 10,
           "description": "最大建议数量"
         },
-        "namecraft.customRules": {
+        "namecraft.siliconflowApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "SiliconFlow API Key (获取地址: https://cloud.siliconflow.cn/me/account/ak)",
+          "markdownDescription": "SiliconFlow API Key\n\n**获取步骤:**\n1. 访问 [SiliconFlow控制台](https://cloud.siliconflow.cn/me/account/ak)\n2. 登录或注册账号\n3. 创建API Key\n4. 复制并粘贴到此处"
+        },
+        "namecraft.customKeybindings": {
           "type": "object",
-          "default": {},
-          "description": "自定义快捷键规则",
-          "properties": {
-            "alt1": {
-              "type": "object",
-              "description": "Alt+1 快捷键规则"
-            },
-            "alt2": {
-              "type": "object", 
-              "description": "Alt+2 快捷键规则"
-            },
-            "alt3": {
-              "type": "object",
-              "description": "Alt+3 快捷键规则"
-            },
-            "alt4": {
-              "type": "object",
-              "description": "Alt+4 快捷键规则"
-            },
-            "alt5": {
-              "type": "object",
-              "description": "Alt+5 快捷键规则"
-            }
-          }
+          "default": {
+            "f3": "_snake_case",
+            "f4": "CONSTANT_CASE"
+          },
+          "description": "自定义快捷键绑定",
+          "additionalProperties": {
+            "type": "string",
+            "enum": [
+              "camelCase",
+              "PascalCase",
+              "snake_case",
+              "_snake_case",
+              "CONSTANT_CASE",
+              "kebab-case"
+            ]
+          },
+          "markdownDescription": "自定义快捷键绑定\n\n**示例配置:**\n```json\n{\n  \"f3\": \"_snake_case\",\n  \"f4\": \"CONSTANT_CASE\",\n  \"ctrl+shift+c\": \"camelCase\"\n}\n```"
         }
       }
     }
@@ -225,7 +233,6 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js",
     "package": "vsce package",
     "clean": "rimraf out"
   },
@@ -235,8 +242,7 @@
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "eslint": "^8.28.0",
-    "typescript": "^4.9.4",
-    "@vscode/test-electron": "^2.2.0"
+    "typescript": "^4.9.4"
   },
   "dependencies": {
     "axios": "^1.6.0"
