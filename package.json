@@ -249,11 +249,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/namecraft/vscode-extension"
+    "url": "https://github.com/1320209572/name-craft"
   },
   "bugs": {
-    "url": "https://github.com/namecraft/vscode-extension/issues"
+    "url": "https://github.com/1320209572/name-craft/issues"
   },
-  "homepage": "https://github.com/namecraft/vscode-extension#readme",
+  "homepage": "https://github.com/1320209572/name-craft#readme",
   "license": "MIT"
 }
